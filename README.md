@@ -2,11 +2,11 @@
 
 *Write your blog like a master*
 
-This is a simple blog engine. It's not dedicated to anyone because it's built upon `Node.js` and `MongoDB`, which aren't easily accessible on any hosting. However, it features simple, uncluttered design both for a reader and a writer and makes it much easier to share your thoughts.
+This is a simple blog engine. It's not dedicated to everyone because it's built upon `Node.js` and `MongoDB`, which aren't easily accessible on any hosting. However, it features simple, uncluttered design both for a reader and a writer and makes it much easier to share your thoughts.
 
 `Here to be screenshots`
 
-**Mikhail Bulgakov** is a great Russian writer. He wrote famous “Master and Margarita” ­­­– you could have heard of it. In honor of him is called so this blog engine.
+**Mikhail Bulgakov** is a great Russian writer. He wrote famous “Master and Margarita” ­­­– you could have heard of it. In honor of him is called this blog engine.
 
 ## Technologies
 
