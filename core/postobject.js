@@ -3,6 +3,7 @@
 var _ = require("underscore");
 var check = require("check-types");
 var common = require("./common");
+var contentCompiler = require("./contentcompiler");
 var DataObject = require("./dataobject");
 
 /**
@@ -18,6 +19,17 @@ function PostObject() {
 PostObject.prototype = Object.create(DataObject.prototype);
 PostObject.prototype.constructor = PostObject;
 
+/**
+ * Compiles plain body, saves it to the post object and passes it to the callback.
+ * @param {Function} callback
+ */
+PostObject.prototype.compileBody = function(callback) {
+    contentCompiler.compile(this.plainBody, function(result) {
+        this.parsedBody = result;
+        setImmediate(callback, this.parsedBody);
+    }.bind(this));
+};
+
 // Defining properties and methods
 var keys = [];
 var validators = {};
@@ -32,60 +44,25 @@ PostObject.prototype.title = "";
 validators.title = check.unemptyString;
 
 /**
- * Post body in markdown.
+ * Post body in plain format (currently Markdown).
  * @type {string}
  */
-PostObject.prototype.mdBody = "";
-validators.mdBody = check.unemptyString;
+PostObject.prototype.plainBody = "";
+validators.plainBody = check.unemptyString;
 
 /**
- * Post body compiled from Markdown to HTML.
+ * Post body compiled from plain format to HTML.
  * @type {string}
  */
-PostObject.prototype.cachedHtmlBody = "";
-validators.cachedHtmlBody = check.unemptyString;
+PostObject.prototype.parsedBody = "";
+validators.parsedBody = check.string;
 
 /**
- * Labels attached to the post. Each element of the array is a label id.
- * @type {number[]}
+ * Labels attached to the post. Each element of the array is a label text.
+ * @type {string[]}
  */
 PostObject.prototype.labels = [];
 validators.labels = check.array;
-
-/**
- * Post description for search engines.
- * @type {string}
- */
-PostObject.prototype.searchDescription = "";
-validators.searchDescription = check.string;
-
-/**
- * Post keywords for search engines.
- * @type {string[]}
- */
-PostObject.prototype.searchKeywords = [];
-validators.searchKeywords = check.array;
-
-/**
- * URL of post image for social networks.
- * @type {string}
- */
-PostObject.prototype.socialImage = "";
-validators.socialImage = check.webUrl;
-
-/**
- * Post title for social networks.
- * @type {string}
- */
-PostObject.prototype.socialTitle = "";
-validators.socialTitle = check.string;
-
-/**
- * Post description for social networks.
- * @type {string}
- */
-PostObject.prototype.socialDescription = "";
-validators.socialDescription = check.string;
 
 /**
  * Post publication date.
