@@ -14,7 +14,7 @@ This is a simple blog engine. It's not dedicated to everyone because it's built 
 
 - Node.js
 - Express.js
-- MongoDB
+- Mongo DB
 - Jade
 - LESS
 - Underscore.js
