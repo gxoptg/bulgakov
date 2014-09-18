@@ -5,6 +5,7 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var lessMiddleware = require('less-middleware');
 
+var userSideRouter = require("./routes/userside");
 var apiPostsRouter = require("./routes/api_posts");
 
 var app = express();
@@ -21,6 +22,7 @@ app.use(bodyParser.urlencoded());
 app.use(lessMiddleware(path.join(__dirname, 'public'), { force: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use("/", userSideRouter);
 app.use("/api/posts", apiPostsRouter);
 
 /// catch 404 and forward to error handler
