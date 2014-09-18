@@ -38,5 +38,9 @@ function validate(object, keys, validators) {
     return isValid;
 }
 
+/** Defines how mane=y posts per page to show in the user side. */
+var postsPerPage = 10;
+
 exports.copyFields = copyFields;
 exports.validate = validate;
+exports.postsPerPage = postsPerPage;
