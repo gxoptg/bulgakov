@@ -1,5 +1,6 @@
 /** @module api_posts */
 
+var _ = require("underscore");
 var express = require("express");
 var check = require("check-types");
 var httpStatus = require("http-status-codes");
@@ -16,7 +17,7 @@ router.post("/new", function(req, res) {
     var postObject = PostObject.fromJSON(req.body);
 
     if (postObject === null) {
-        // Write about the error to the page
+        // Return error in JSON
         sendResponse(res, AppError.wrongObjectFormat);
         return;
     }
@@ -27,12 +28,37 @@ router.post("/new", function(req, res) {
     });
 });
 
+router.get("/list", function(req, res) {
+    var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : 1;
+
+    if (!check.intNumber(pageNumber)) {
+        sendResponse(res, AppError.badRequest);
+        return;
+    }
+
+    var offset = (pageNumber - 1) * common.postsPerPage;
+    var count = common.postsPerPage;
+
+    // Get list of posts
+    api.posts.list(offset, count, function(appError, posts) {
+        // ...and convert each to JSON.
+        var jsonObjects = [];
+        _.forEach(posts, function(post) {
+            jsonObjects.push(post.toJSON());
+        });
+
+        sendResponse(res, appError, { pageNumber: pageNumber, posts: jsonObjects });
+    });
+
+});
+
 router.get("/:id", function(req, res) {
     var postId = parseInt(req.params.id);
 
     // Check whether id is correct
     if (!check.intNumber(postId)) {
         sendResponse(res, AppError.wrongIdFormat);
+        return;
     }
 
     // Get post content
@@ -57,6 +83,7 @@ router.put("/:id", function(req, res) {
         return;
     }
 
+    // Update the post to the new version
     api.posts.update(postId, postObject, function(appError, postId) {
         sendResponse(res, appError, { postId: postId });
     });
@@ -71,7 +98,7 @@ router.delete("/:id", function(req, res) {
         return;
     }
 
-    // Get post content
+    // Remove the post
     api.posts.remove(postId, function(appError, postId) {
         sendResponse(res, appError, { postId: postId });
     });

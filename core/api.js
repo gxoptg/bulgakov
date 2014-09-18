@@ -1,5 +1,6 @@
 /** @module api */
 
+var _ = require("underscore");
 var monk = require("monk");
 var common = require("./common");
 var AppError = require("./apperror");
@@ -8,6 +9,7 @@ var PostObject = require("./postobject");
 
 var db = monk('localhost:27017/nodejscms');
 var postsCollection = db.get("posts");
+postsCollection.ensureIndex({id: -1}, {unique: true});
 var api = { posts: {} };
 
 /**
@@ -94,6 +96,29 @@ api.posts.remove = function(postId, callback) {
 };
 
 /**
+ * Returns a list of post objects sorted by date created (newer are first).
+ * @param {number} offset How many posts skip.
+ * @param {number} count How many results return.
+ * @param {postsArrayCallback} callback
+ */
+api.posts.list = function(offset, count, callback) {
+    postsCollection.find({}, { sort: {_id: -1}, skip: offset, limit: count},
+        function(dbError, documents) {
+            if (dbError) {
+                callCallbackError(callback, new AppDbError(dbError));
+            } else {
+                // Converting all JSON documents returned by the DB to post objects.
+                var postObjects = [];
+                _.forEach(documents, function(dbDocument) {
+                    postObjects.push( PostObject.fromJSON(dbDocument) );
+                });
+                callCallbackResult(callback, postObjects);
+            }
+        }
+    );
+};
+
+/**
  * Reserves an available post id and returns it via callback.
  * @function reservePostId
  * @param {postIdCallback} callback
@@ -150,7 +175,7 @@ function callCallbackError(callback, error) {
 /**
  * Calls a callback with a result.
  * @param {(postIdCallback|postObjectCallback)} callback
- * @param {(number|PostObject)} result
+ * @param {(number|PostObject|PostObject[])} result
  */
 function callCallbackResult(callback, result) {
     setImmediate(callback, null, result);
@@ -167,6 +192,12 @@ function callCallbackResult(callback, result) {
  * @description Receiver error and post object parameters.
  * @param {(AppError|AppDbError)} error
  * @param {PostObject} postObject
+ */
+/**
+ * @callback postsArrayCallback
+ * @description Receives error and posts array parameters.
+ * @param {(AppError|AppDbError)} error
+ * @param {PostObject[]} postsArray
  */
 
 module.exports = api;
