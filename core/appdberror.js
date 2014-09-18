@@ -10,7 +10,7 @@ var AppError = require("./apperror");
  * @constructor
  */
 function AppDbError(description) {
-    AppError.call(this, AppError.basic.dbError.description, AppError.basic.dbError.code, AppError.basic.dbError.httpStatus);
+    AppError.call(this, AppError.dbError.description, AppError.dbError.code, AppError.dbError.httpStatus);
 
     this.dbErrorDescription = description;
 }
