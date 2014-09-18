@@ -3,21 +3,14 @@
 var marked = require("marked");
 
 /**
- * Parses user's content (such as post body) from the representation (currently Markdown) to HTML.
+ * Compiles user's content (such as post body) from the representation (currently Markdown) to HTML.
  * @param {string} content
- * @param {parserCallback} callback
+ * @returns {string} Compiled content.
  */
-function compile(content, callback) {
+function compile(content) {
     var result;
     result = marked(content);
-    setImmediate(callback, result);
+    return result;
 }
-
-/**
- * Callback for the parser. It is called when parsing is finished with only result parameter.
- * Content is tried to compile despite any errors (like HTML) so no error parameter is provided.
- * @callback parserCallback
- * @param {string} result Parse result.
- */
 
 exports.compile = compile;
