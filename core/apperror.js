@@ -60,6 +60,7 @@ AppError.byCode = function(errorCode) {
 var errorCode = 1;  // For creating basic app errors.
 AppError.wrongIdFormat = new AppError("The ID must be an integer", errorCode++, httpStatus.BAD_REQUEST);
 AppError.wrongObjectFormat = new AppError("Wrong object format", errorCode++, httpStatus.BAD_REQUEST);
+AppError.badRequest = new AppError("Bad request", errorCode++, httpStatus.BAD_REQUEST);
 AppError.unauthorized = new AppError("Authorization is required", errorCode++, httpStatus.UNAUTHORIZED);
 AppError.wrongMethod = new AppError("Wrong access method", errorCode++, httpStatus.METHOD_NOT_ALLOWED);
 AppError.internalError = new AppError("Internal server error", errorCode++, httpStatus.INTERNAL_SERVER_ERROR);
