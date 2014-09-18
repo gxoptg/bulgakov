@@ -21,13 +21,11 @@ PostObject.prototype.constructor = PostObject;
 
 /**
  * Compiles plain body, saves it to the post object and passes it to the callback.
- * @param {Function} callback
+ * @returns {string} Compiled body.
  */
-PostObject.prototype.compileBody = function(callback) {
-    contentCompiler.compile(this.plainBody, function(result) {
-        this.parsedBody = result;
-        setImmediate(callback, this.parsedBody);
-    }.bind(this));
+PostObject.prototype.compileBody = function() {
+    this.compiledBody = contentCompiler.compile(this.plainBody);
+    return this.compiledBody;
 };
 
 // Defining properties and methods
@@ -35,6 +33,14 @@ var keys = [];
 var validators = {};
 var convertersFromJSON = {};
 var convertersToJSON = {};
+
+/**
+ * Post id.
+ * @type {number}
+ * @public
+ */
+PostObject.prototype._id = 0;
+validators._id = check.maybe.intNumber;
 
 /**
  * Post title.
@@ -54,8 +60,8 @@ validators.plainBody = check.unemptyString;
  * Post body compiled from plain format to HTML.
  * @type {string}
  */
-PostObject.prototype.parsedBody = "";
-validators.parsedBody = check.string;
+PostObject.prototype.compiledBody = "";
+validators.compiledBody = check.maybe.unemptyString;
 
 /**
  * Labels attached to the post. Each element of the array is a label text.
@@ -93,15 +99,20 @@ PostObject.canBeConverted = function(object) {
 /**
  * Converts the passed object to a post object.
  * @param {Object} object
- * @returns {PostObject|null} Post object or null, if conversion was unsuccessful.
+ * @returns {PostObject} Post object or null, if conversion was unsuccessful.
  */
 PostObject.fromJSON = function(object) {
     var dataObject = DataObject.fromJSON(object, keys, validators, convertersFromJSON);
+    var postObject = null;
+
     if (dataObject) {
-        return _.extend(new PostObject(), dataObject);   // Performing a cast
-    } else {
-        return null;
+        postObject = _.extend(new PostObject(), dataObject);   // Performing a type cast
+        if (!postObject.compiledBody) {
+            postObject.compileBody();
+        }
     }
+
+    return postObject;
 };
 
 /**
