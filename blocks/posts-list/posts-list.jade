@@ -1,0 +1,20 @@
+include /views/common
+include /blocks/post/post
+
+mixin posts-list(posts, page, totalPages, parameters)
+    - var bemBlock = {};
+    - bemBlock.css = "/blocks/posts-list/posts-list.css";
+
+    - var hasPrevPage = page > 1;
+    - var hasNextPage = page < totalPages;
+
+    .posts-list
+        if hasPrevPage
+            - var prevPageLink = (page - 1 === 1) ? ("/") : ("/?page=" + (page - 1));
+            a.posts-list__nav.posts-list__nav_view_prev(href="#{prevPageLink}") Previous
+        each post in posts
+            +post(post, {hasLinkToSelf: true})
+        if hasNextPage
+            a.posts-list__nav.posts-list__nav_view_next(href="/?page=#{page + 1}") Next
+
+    +define-block-css(bemBlock.css)

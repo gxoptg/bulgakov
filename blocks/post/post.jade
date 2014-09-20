@@ -1,0 +1,28 @@
+include /views/common
+
+- var POST_CSS = "/blocks/post/post.css";
+
+mixin post(postObject, parameters)
+    - var bemBlock = {};
+    - bemBlock.css = "/blocks/post/post.css";
+    - bemBlock.modificators = [];
+
+    - var hasLinkToSelf = parameters ? parameters.hasLinkToSelf : false;
+    - if (hasLinkToItself) bemBlock.modificators.push("post_has-link-to-self");
+
+    .post&attributes( {"class": bemBlock.modificators.join(" ")} )
+        h1.post__title
+            if hasLinkToSelf
+                a(href="/post/#{postObject._id + 1}")= postObject.title
+            else
+                span= postObject.title
+
+        div.post__date= postObject.publicationDate
+
+        div.post__body!= postObject.compiledBody
+
+        ul.post__labels
+            each label in postObject.labels
+                li.post__label= label
+
+        +define-block-css(bemBlock.css)
