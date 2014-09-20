@@ -1,0 +1,10 @@
+extends /views/layout
+
+include /views/common
+include /blocks/posts-list/posts-list
+
+block title
+    title All posts
+
+block content
+    +posts-list(posts, page, totalPages)

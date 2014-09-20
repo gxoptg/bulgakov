@@ -1,7 +1,12 @@
+include /views/common
+
 doctype html
-html
+html(lang="en")
     head
-        title= title
-        link(rel='stylesheet', href='/stylesheets/style.css')
+        block title
+        meta(charset="utf-8")
+        block stylesheets
+            link(rel="stylesheet", href="/common/common.css")
     body
         block content
+            p Nothing here

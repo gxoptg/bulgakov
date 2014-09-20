@@ -1,0 +1,26 @@
+mixin css-link(link)
+    link(rel="stylesheet", href=link)
+
+mixin js-link(link)
+    script(src=link)
+
+// Adds block CSS file to <head>
+mixin define-block-css(blockCSS)
+    script.
+        (function() {
+            // Storing all added links in the array to prevent them from duplication in <head>.
+            if (!window.dynamicCSSLinks) {
+                window.dynamicCSSLinks = [];
+            }
+
+            var blockCSS = "#{blockCSS}";
+
+            // If this block CSS hasn't been added to <head> yet, we add it.
+            if (window.dynamicCSSLinks.indexOf(blockCSS) === -1) {
+                var link = document.createElement("link");
+                link.rel = "stylesheet";
+                link.href = blockCSS;
+                document.getElementsByTagName("head")[0].appendChild(link);
+                window.dynamicCSSLinks.push(blockCSS);
+            }
+        })();

@@ -1,6 +1,12 @@
-extends layout
+extends /views/layout
+
+block title
+    title Error
 
 block content
-    h1= message
-    h2= error.status
-    pre #{error.stack}
+    h1= error.message
+    p= error.httpStatus
+    if error.code > 0
+        p= "Internal error code " + error.code
+    if (error.dbErrorDescription)
+        p= "DB Error: " + error.dbErrorDescription
