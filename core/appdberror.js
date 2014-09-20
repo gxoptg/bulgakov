@@ -10,17 +10,18 @@ var AppError = require("./apperror");
  * @constructor
  */
 function AppDbError(description) {
-    AppError.call(this, AppError.dbError.description, AppError.dbError.code, AppError.dbError.httpStatus);
+    AppError.call(this, AppError.dbError.message, AppError.dbError.code, AppError.dbError.httpStatus);
 
     this.dbErrorDescription = description;
 }
 
 AppDbError.prototype = Object.create(AppError.prototype);
 AppDbError.prototype.constructor = AppDbError;
+AppDbError.prototype.name = "AppDbError";
 
 /**
  * Returns public data of AppError extended with dbErrorDescription property.
- * @return {{code: number, description: string, dbErrorDescription: *}}
+ * @return {{code: number, message: string, dbErrorDescription: *}}
  */
 AppDbError.prototype.publicData = function() {
     var data = AppError.prototype.publicData.call(this);
