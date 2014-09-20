@@ -15,7 +15,7 @@ var api = { posts: {} };
 /**
  * Publishes a new post.
  * @param {PostObject} post Post object to post.
- * @param {postIdCallback} callback
+ * @param {postCallback} callback
  */
 api.posts.post = function(post, callback) {
     var jsonDocument = post.toJSON();
@@ -42,7 +42,7 @@ api.posts.post = function(post, callback) {
 /**
  * Gets a post from the database.
  * @param {number} postId Post id to retrieve from the database.
- * @param {postObjectCallback} callback
+ * @param {postCallback} callback
  */
 api.posts.get = function(postId, callback) {
     postsCollection.findById(postId, function(dbError, document) {
@@ -62,7 +62,7 @@ api.posts.get = function(postId, callback) {
  * Updates a post in the database.
  * @param {number} postId A post id to update.
  * @param {PostObject} postObject A new post content.
- * @param {postIdCallback} callback
+ * @param {postCallback} callback
  */
 api.posts.update = function(postId, postObject, callback) {
     var jsonDocument = postObject.toJSON();
@@ -81,7 +81,7 @@ api.posts.update = function(postId, postObject, callback) {
 /**
  * Removes a post from the database.
  * @param {number} postId ID of the post to delete.
- * @param {postIdCallback} callback
+ * @param {postCallback} callback
  */
 api.posts.remove = function(postId, callback) {
     postsCollection.remove({ _id: postId }, function(dbError, removedCount) {
@@ -99,7 +99,7 @@ api.posts.remove = function(postId, callback) {
  * Returns a list of post objects sorted by date created (newer are first).
  * @param {number} offset How many posts skip.
  * @param {number} count How many results return.
- * @param {postsArrayCallback} callback
+ * @param {postCallback} callback
  */
 api.posts.list = function(offset, count, callback) {
     postsCollection.find({}, { sort: {_id: -1}, skip: offset, limit: count},
@@ -116,6 +116,20 @@ api.posts.list = function(offset, count, callback) {
             }
         }
     );
+};
+
+/**
+ * Finds number of all posts in the database.
+ * @param {postCallback} callback
+ */
+api.posts.count = function(callback) {
+    postsCollection.count({}, function(dbError, postsCount) {
+        if (dbError) {
+            callCallbackError(callback, dbError);
+        } else {
+            callCallbackResult(callback, postsCount);
+        }
+    })
 };
 
 /**
@@ -165,7 +179,7 @@ var reservePostId = (function() {
 
 /**
  * Calls a callback with an error object.
- * @param {(postIdCallback|postObjectCallback)} callback
+ * @param {postCallback} callback
  * @param {(AppError|AppDbError)} error
  */
 function callCallbackError(callback, error) {
@@ -174,7 +188,7 @@ function callCallbackError(callback, error) {
 
 /**
  * Calls a callback with a result.
- * @param {(postIdCallback|postObjectCallback)} callback
+ * @param {postCallback} callback
  * @param {(number|PostObject|PostObject[])} result
  */
 function callCallbackResult(callback, result) {
@@ -182,22 +196,9 @@ function callCallbackResult(callback, result) {
 }
 
 /**
- * @callback postIdCallback
- * @description Receives error and post id parameters.
+ * @callback postCallback
  * @param {(AppError|AppDbError)} error
- * @param {number} postId
- */
-/**
- * @callback postObjectCallback
- * @description Receiver error and post object parameters.
- * @param {(AppError|AppDbError)} error
- * @param {PostObject} postObject
- */
-/**
- * @callback postsArrayCallback
- * @description Receives error and posts array parameters.
- * @param {(AppError|AppDbError)} error
- * @param {PostObject[]} postsArray
+ * @param {*} result
  */
 
 module.exports = api;
