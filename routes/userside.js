@@ -1,6 +1,10 @@
-/** @module userside */
+/**
+ * Router for the user side (reader interface).
+ * @module userside
+ */
 
 var _ = require("underscore");
+var check = require("check-types");
 var express = require("express");
 var api = require("../core/api");
 var common = require("../core/common");
@@ -8,7 +12,9 @@ var AppError = require("../core/apperror");
 
 var router = express.Router();
 
+// List all posts by pages
 router.get("/", function(req, res, next) {
+    // Validating request
     var requiredPage = parseInt(req.query.page);
     if (_.isNaN(requiredPage)) {
         requiredPage = 1;
@@ -46,8 +52,33 @@ router.get("/", function(req, res, next) {
                 posts: posts
             };
 
+            // Render
             res.render("posts-page", data);
         });
+    });
+});
+
+// A specified post
+router.get("/post/:id", function(req, res, next) {
+    var postId = parseInt(req.params.id);
+
+    // Check whether id is correct
+    if (!check.intNumber(postId)) {
+        next(AppError.wrongIdFormat);
+        return;
+    }
+
+    api.posts.get(postId, function(appError, postObject) {
+        if (appError) {
+            next(appError);
+            return;
+        }
+
+        var data = {
+            post: postObject
+        };
+
+        res.render("post-page", data);
     });
 });
 
