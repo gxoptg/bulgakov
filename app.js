@@ -4,7 +4,7 @@ var logger = require("morgan");
 var bodyParser = require("body-parser");
 var lessMiddleware = require("less-middleware");
 
-var userSideRouter = require("./routes/userside");
+var userSideRouter = require("./routes/reader-side");
 var apiPostsRouter = require("./routes/api_posts");
 
 var AppError = require("./core/apperror");
