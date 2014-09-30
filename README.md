@@ -24,9 +24,9 @@ This is a simple blog engine. It's not dedicated to everyone because it's built 
 ## Work progress
 
 - [x] Basic API for working with posts
-- [ ] Basic reader side interface
+- [x] Basic reader side interface
  - [x] View for all posts
- - [ ] View for one post
+ - [x] View for one post
 - [ ] Basic writer side interface
  - [ ] View for all posts
  - [ ] View for writing a new post
