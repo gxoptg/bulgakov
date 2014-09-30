@@ -25,12 +25,13 @@ This is a simple blog engine. It's not dedicated to everyone because it's built 
 
 - [x] Basic API for working with posts
 - [ ] Basic reader side interface
- - [ ] View for all posts
+ - [x] View for all posts
  - [ ] View for one post
 - [ ] Basic writer side interface
  - [ ] View for all posts
  - [ ] View for writing a new post
  - [ ] View for editing a post
+- [ ] AJAX for user and writer sides.
 - [ ] Design for reader and writer sides
 - [ ] ???
 
