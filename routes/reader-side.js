@@ -1,6 +1,6 @@
 /**
- * Router for the user side (reader interface).
- * @module userside
+ * Router for the reader side (reader interface).
+ * @module reader-side
  */
 
 var _ = require("underscore");
