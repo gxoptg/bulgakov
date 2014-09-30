@@ -1,4 +1,7 @@
-/** @module api_posts */
+/**
+ * RESTful API for posts manipulation
+ * @module api_posts
+ */
 
 var _ = require("underscore");
 var express = require("express");
@@ -12,6 +15,7 @@ var AppDbError = require("../core/appdberror");
 
 var router = express.Router();
 
+// New post
 router.post("/new", function(req, res) {
     // Convert post data to PostObject
     var postObject = PostObject.fromJSON(req.body);
@@ -28,6 +32,7 @@ router.post("/new", function(req, res) {
     });
 });
 
+// List of posts
 router.get("/list", function(req, res) {
     var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : 1;
 
@@ -49,9 +54,9 @@ router.get("/list", function(req, res) {
 
         sendResponse(res, appError, { pageNumber: pageNumber, posts: jsonObjects });
     });
-
 });
 
+// Get a specified post
 router.get("/:id", function(req, res) {
     var postId = parseInt(req.params.id);
 
@@ -68,6 +73,7 @@ router.get("/:id", function(req, res) {
     });
 });
 
+// Update a post
 router.put("/:id", function(req, res) {
     var postId = parseInt(req.params.id);
 
@@ -89,6 +95,7 @@ router.put("/:id", function(req, res) {
     });
 });
 
+// Delete a post
 router.delete("/:id", function(req, res) {
     var postId = parseInt(req.params.id);
 
