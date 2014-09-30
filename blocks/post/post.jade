@@ -13,7 +13,7 @@ mixin post(postObject, parameters)
     .post&attributes( {"class": bemBlock.modificators.join(" ")} )
         h1.post__title
             if hasLinkToSelf
-                a(href="/post/#{postObject._id + 1}")= postObject.title
+                a(href="/post/#{postObject._id}")= postObject.title
             else
                 span= postObject.title
 
