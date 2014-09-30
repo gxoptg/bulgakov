@@ -1,0 +1,7 @@
+extends /views/layout
+include /views/common
+include /blocks/post/post
+block title
+    title= post.title
+block content
+    +post(post)
