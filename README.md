@@ -39,4 +39,4 @@ This is a simple blog engine. It's not dedicated to everyone because it's built 
 
 <img src="http://i.imgur.com/4moEENe.jpg" width="150">
 
-**[Ivan Akulov](http://ivanakulov.name)**, web and desktop developer
+**[Ivan Akulov](http://iamakulov.com)**, front-end developer
